@@ -1,21 +1,24 @@
 #!/usr/bin/python3
+"""
+    12-pascal_triangle: pascal_triangle()
+"""
+
+
 def pascal_triangle(n):
-    """returns a list of lists of integers
-        representing the Pascal triangle of size n
-    Args:
-        n(int): size of Pascal triangle
-    Returns:
-        list of lists of integers representing Pascal triangle
     """
-    outer = []
+        returns a lis of lists of integers
+        Args:
+            n (int): number of lists and digits
+        Returns: list of lists
+    """
+    t_row = [1]
+    temp_l = [0]
+    pTri = []
+
+    if n <= 0:
+        return pTri
+
     for i in range(n):
-        inner = []
-        for j in range(i + 1):
-            if j == 0:
-                inner.append(1)
-            elif j == i:
-                inner.append(1)
-            else:
-                inner.append(outer[i - 1][j - 1] + outer[i - 1][j])
-        outer.append(inner)
-    return outer
+        pTri.append(t_row)
+        t_row = [l+r for l, r in zip(t_row + temp_l, temp_l + t_row)]
+    return pTri

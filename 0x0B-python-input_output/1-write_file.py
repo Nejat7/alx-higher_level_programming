@@ -1,11 +1,16 @@
 #!/usr/bin/python3
+""" Module that contains a function that writes to a text file
+"""
+
+
 def write_file(filename="", text=""):
+    """ Function that writes to a text file
+    Args:
+        filename: filename
+        text: text to write
+    Raises
+        Exception: when the file can be opened
     """
-    Writes a string to a text file (UTF8) and returns
-    the number of characters written:
-    Prototype: def write_file(filename="", text=""):
-    Create the file if doesn’t exist and overwrite the content
-    of the file if it already exists.
-    """
-    with open(filename, 'w', encoding = "utf-8") as f:
-        return (f.write(text))
+
+    with open(filename, 'w', encoding="utf-8") as f:
+        return f.write(text)
