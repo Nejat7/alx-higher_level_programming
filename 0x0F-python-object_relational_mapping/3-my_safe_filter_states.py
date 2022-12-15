@@ -1,46 +1,42 @@
 #!/usr/bin/python3
-"""3-my_safe_filter_states module
-contains a script that lists all states with a given name
-from a given database and is sql-injection safe
 """
-from sys import argv
+This script takes in an argument and
+displays all values in the states
+where `name` matches the argument
+from the database `hbtn_0e_0_usa`.
+
+This time the script is safe from
+MySQL injections!
+"""
 
 import MySQLdb
+from sys import argv
 
-
-def list_all_states_filtered(username, password, db_name, state_name):
-    """lists all states with the given name from a database
-    Args:
-        username (str): mysql username
-        password (str): mysql password
-        db_name (str): the database name
-        state_name (str): the state name
+if __name__ == '__main__':
     """
-    conn = MySQLdb.connect(
-        host="localhost",
-        port=3306,
-        user=username,
-        passwd=password,
-        db=db_name,
-        charset="utf8"
-    )
-    cur = conn.cursor()
-    cur.execute(
-        "SELECT * FROM states WHERE name LIKE BINARY %s ORDER BY id ASC",
-        [state_name]
-    )
-    query_rows = cur.fetchall()
-    for row in query_rows:
-        print(row)
-    cur.close()
-    conn.close()
+    Access to the database and get the states
+    from the database.
+    """
 
+    db = MySQLdb.connect(host="localhost", user=argv[1], port=3306,
+                         passwd=argv[2], db=argv[3])
 
-if __name__ == "__main__":
-    if (len(argv) - 1 >= 4):
-        list_all_states_filtered(
-            username=argv[1],
-            password=argv[2],
-            db_name=argv[3],
-            state_name=argv[4]
-        )
+    with db.cursor() as cur:
+        cur.execute("""
+            SELECT
+                *
+            FROM
+                states
+            WHERE
+                name LIKE BINARY %(name)s
+            ORDER BY
+                states.id ASC
+        """, {
+            'name': argv[4]
+        })
+
+        rows = cur.fetchall()
+
+    if rows is not None:
+        for row in rows:
+            print(row)

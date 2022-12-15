@@ -1,40 +1,26 @@
 #!/usr/bin/python3
 """
-Filters states with name starting with N
-Usage: ./1-filter_states.py <mysql username> \
-                            <mysql password> \
-                            <database name>
+This script lists all states with
+a `name` starting with the letter `N`
+from the database `hbtn_0e_0_usa`.
 """
-from sys import argv
+
 import MySQLdb
+from sys import argv
 
-
-def list_all_states_filtered(username, password, db_name):
-    """lists all states with a name that starts with N from a database
-    Args:
-        username (str): mysql username
-        password (str): mysql password
-        db_name (str): the database name
+if __name__ == '__main__':
     """
-    conn = MySQLdb.connect(
-        host="localhost",
-        port=3306,
-        user=username,
-        passwd=password,
-        db=db_name,
-        charset="utf8"
-    )
-    cur = conn.cursor()
-    cur.execute(
-        "SELECT * FROM states WHERE name LIKE BINARY 'N%' ORDER BY id ASC")
-    query_rows = cur.fetchall()
-    for row in query_rows:
+    Access to the database and get the states
+    from the database.
+    """
+    db = MySQLdb.connect(host="localhost", user=argv[1], port=3306,
+                         passwd=argv[2], db=argv[3])
+
+    cur = db.cursor()
+    cur.execute("SELECT * FROM states \
+                 WHERE name LIKE BINARY 'N%' \
+                 ORDER BY states.id ASC")
+    rows = cur.fetchall()
+
+    for row in rows:
         print(row)
-    cur.close()
-    conn.close()
-
-
-if __name__ == "__main__":
-    if (len(argv) - 1 >= 3):
-        list_all_states_filtered(
-            username=argv[1], password=argv[2], db_name=argv[3])
